@@ -3,9 +3,8 @@ Travel Tracker A1
 Name: Daniel Mackenzie
 Date started: 30/08/20
 GitHub URL: https://github.com/DGMGIT/travel-tracker-assignment-1-ichaturvedi-master
-Draft 2 - part 03
-worked on program. add choices L (print_list_places) prints list of places, total places, number places left to visit
-add second get_choices to stop endless looping
+Draft 2 - part 04
+worked on program. add choices A (valid_new_place) allows user to enter a new places
 """
 
 
@@ -23,7 +22,9 @@ def main():
         if get_choices == "L":
             print_list_places(places)
         elif get_choices == "A":
-            pass
+            new_place = valid_new_place()
+            places.append(new_place)
+            print("{} in {} (priority {}) added to Travel Tracker".format(new_place[0], new_place[1], new_place[2]))
         elif get_choices == "M":
             pass
         else:
@@ -81,6 +82,33 @@ def print_list_places(places):
         print(f"{num_2} places. You still want to visit {num_3} places.")
     elif num_3 == 0:
         print(f"{num_2} places. No places left to visit. Why not add a new place?")
+
+
+def valid_new_place():
+    finished = False
+    new_place = []
+    city = str(input("Name: "))
+    while len(city) == 0:
+        print("Input can not be blank")
+        city = str(input("Name"))
+    new_place.append(city)
+    country = str(input("Country: "))
+    while len(country) == 0:
+        print("Input can not be blank")
+        country = str(input("Country: "))
+    new_place.append(country)
+    while finished is False:
+        try:
+            priority = int(input("Priority: "))
+            while priority <= 0:
+                print("Number must be > 0")
+                priority = int(input("Priority: "))
+            finished = True
+            new_place.append(priority)
+            new_place.append("n")
+        except ValueError:
+            print("Invalid input; enter a valid number")
+    return new_place
 
 
 if __name__ == '__main__':
