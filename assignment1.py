@@ -3,10 +3,9 @@ Travel Tracker A1
 Name: Daniel Mackenzie
 Date started: 30/08/20
 GitHub URL: https://github.com/DGMGIT/travel-tracker-assignment-1-ichaturvedi-master
-Draft 2 - part 05
-worked on program. add choices M (places_non_visited, mark_as_visited)
-one calculates if there are anymore places o visit,
-two allows a user to mark a place in places as visited
+Draft 2 - part 06
+worked on program. added (output_places) output current list, added quit message, added dotstrings,
+made places.csv a constants
 """
 
 
@@ -14,6 +13,7 @@ from operator import itemgetter
 
 
 MENU = "Menu:\nL - List places\nA - Add new place\nM - Mark a place as visited\nQ - Quit\n>>> "
+places_file = "places.csv"  #format. city, country, visited status V/N, priority
 
 
 def main():
@@ -41,11 +41,15 @@ def main():
         else:
             print("Invalid menu choice")
         get_choices = input(MENU).upper()
+    output_places(places)
+    print(f"{len(places)} places saved to places.csv\n"
+          "Have a nice day :")
 
 
 def get_places():
+    """input a list of lists containing [city, country, visited status, priority]"""
     list_places = []
-    input_file = open("places.csv", 'r')
+    input_file = open(places_file, 'r')
     for line in input_file:
         line = line.strip()
         place = line.split(",")
@@ -56,11 +60,13 @@ def get_places():
 
 
 def print_welcome_msg(places):
+    """print a welcome message"""
     print("Travel Tracker 1.0 - by Daniel Mackenzie\n"
           f"{len(places)} places loaded from places.csv")
 
 
 def print_list_places(places):
+    """prints a sorted list of places, total all up and amount left to visit"""
     places.sort(key=itemgetter(3, 2))
     num = -1
     num_v = 0
@@ -96,6 +102,7 @@ def print_list_places(places):
 
 
 def valid_new_place():
+    """ask user to input a new location to visit [city, country, priority] visited status is n"""
     finished = False
     new_place = []
     city = str(input("Name: "))
@@ -123,6 +130,7 @@ def valid_new_place():
 
 
 def places_non_visited(places):
+    """calculates if there are anymore places o visit"""
     places.sort(key=itemgetter(3, 2))  # will not work if not sorted after new place added ???
     n = 0
     num = 0
@@ -134,6 +142,7 @@ def places_non_visited(places):
 
 
 def valid_mark_visit(places):
+    """allows a user to mark a place in places as visited e.g. change n to v(places[place][2])"""
     mark_as_visited = 0
     finished = False
     while finished is False:
@@ -149,6 +158,17 @@ def valid_mark_visit(places):
         except ValueError:
             print("Invalid input; enter a valid number")
     return mark_as_visited
+
+
+def output_places(places):
+    """output current list to places.csv"""
+    for i in range(len(places)):
+        places[i][2] = str(places[i][2])  # doesn't work if not a str
+    output_file = open(places_file, 'w')
+    for i in range(len(places)):
+        place = ",".join(places[i])
+        print(place, file=output_file)
+    output_file.close()
 
 
 if __name__ == '__main__':
