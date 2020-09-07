@@ -3,8 +3,10 @@ Travel Tracker A1
 Name: Daniel Mackenzie
 Date started: 30/08/20
 GitHub URL: https://github.com/DGMGIT/travel-tracker-assignment-1-ichaturvedi-master
-Draft 2 - part 04
-worked on program. add choices A (valid_new_place) allows user to enter a new places
+Draft 2 - part 05
+worked on program. add choices M (places_non_visited, mark_as_visited)
+one calculates if there are anymore places o visit,
+two allows a user to mark a place in places as visited
 """
 
 
@@ -25,8 +27,17 @@ def main():
             new_place = valid_new_place()
             places.append(new_place)
             print("{} in {} (priority {}) added to Travel Tracker".format(new_place[0], new_place[1], new_place[2]))
-        elif get_choices == "M":
-            pass
+        elif get_choices == "M": # the hardest to do
+            n = places_non_visited(places)
+            if n == 0:
+                print("No unvisited places")
+            else:
+                print_list_places(places)
+                mark_as_visited = valid_mark_visit(places)
+                if places[mark_as_visited - 1][3] == "v":
+                    print("That place is already visited")
+                else:
+                    places[mark_as_visited - 1][3] = "v"
         else:
             print("Invalid menu choice")
         get_choices = input(MENU).upper()
@@ -109,6 +120,35 @@ def valid_new_place():
         except ValueError:
             print("Invalid input; enter a valid number")
     return new_place
+
+
+def places_non_visited(places):
+    places.sort(key=itemgetter(3, 2))  # will not work if not sorted after new place added ???
+    n = 0
+    num = 0
+    for i in places:
+        if "n" == places[num][3]:
+            n = + 1
+        num = + 1
+    return n
+
+
+def valid_mark_visit(places):
+    mark_as_visited = 0
+    finished = False
+    while finished is False:
+        try:
+            mark_as_visited = int(input("Enter the number of a place to mark as visited\n>>>"))
+            while mark_as_visited < 1 or mark_as_visited > len(places):
+                if mark_as_visited < 1:
+                    print("Number must be > 0")
+                else:
+                    print("Invalid place number")
+                mark_as_visited = int(input("Enter the number of a place to mark as visited\n>>>"))
+            finished = True
+        except ValueError:
+            print("Invalid input; enter a valid number")
+    return mark_as_visited
 
 
 if __name__ == '__main__':
